@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: grocery-container
-        image: mohdshafaquearif/grocery-website:latest  # Change if needed
+        image: shafaque26/grocery-website:latest  # Change if needed
         ports:
         - containerPort: 80
 apiVersion: v1
