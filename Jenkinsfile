@@ -2,9 +2,10 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = "my-html-site"
-        CONTAINER_NAME = "html-container"
-        REPO_URL = "https://github.com/mohdshafaquearif/Dockerization-of-Grocery-Website.git"  
+        IMAGE_NAME = "mohdshafaquearif/grocery-website"
+        CONTAINER_NAME = "grocery-container"
+        REPO_URL = "https://github.com/mohdshafaquearif/Dockerization-of-Grocery-Website.git"
+        KUBE_DEPLOYMENT = "deployment.yaml"
     }
 
     stages {
@@ -17,22 +18,24 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh "docker build -t ${IMAGE_NAME} ."
+                    sh "docker build -t ${IMAGE_NAME}:latest ."
                 }
             }
         }
 
-        stage('Run Docker Container') {
+        stage('Push Docker Image') {
             steps {
                 script {
-                    // Stop and remove any existing container
-                    sh """
-                    docker stop ${CONTAINER_NAME} || true
-                    docker rm ${CONTAINER_NAME} || true
-                    """
+                    sh "echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin"
+                    sh "docker push ${IMAGE_NAME}:latest"
+                }
+            }
+        }
 
-                    // Run the new container
-                    sh "docker run -d -p 8080:80 --name ${CONTAINER_NAME} ${IMAGE_NAME}"
+        stage('Deploy to Kubernetes') {
+            steps {
+                script {
+                    sh "kubectl apply -f ${KUBE_DEPLOYMENT}"
                 }
             }
         }
@@ -40,10 +43,10 @@ pipeline {
 
     post {
         success {
-            echo "Deployment Successful! Access the site at http://localhost:8080"
+            echo "Deployment Successful! Access the site via Kubernetes."
         }
         failure {
-            echo "Build or deployment failed. Check the logs for details."
+            echo "Build, push, or deployment failed. Check the logs for details."
         }
     }
 }
