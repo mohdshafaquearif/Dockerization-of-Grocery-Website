@@ -21,8 +21,11 @@ jobs:
           docker build -t shafaque26/grocery-website:latest .
           docker push shafaque26/grocery-website:latest
 
-      - name: Set up Kubernetes
-        uses: azure/setup-kubectl@v3
+      - name: Set up Kubernetes (Kind)
+        uses: helm/kind-action@v1.8.0
 
       - name: Deploy to Kubernetes
-        run: kubectl apply -f deployment.yaml
+        run: |
+          kubectl cluster-info
+          kubectl apply -f deployment.yaml
+          kubectl get pods -A
