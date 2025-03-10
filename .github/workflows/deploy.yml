@@ -18,8 +18,8 @@ jobs:
 
       - name: Build and Push Docker Image
         run: |
-          docker build -t mohdshafaquearif/grocery-website:latest .
-          docker push mohdshafaquearif/grocery-website:latest
+          docker build -t shafaque26/grocery-website:latest .
+          docker push shafaque26/grocery-website:latest
 
       - name: Set up Kubernetes
         uses: azure/setup-kubectl@v3
