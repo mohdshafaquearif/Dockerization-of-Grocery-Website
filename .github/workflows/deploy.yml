@@ -21,11 +21,11 @@ jobs:
           docker build -t shafaque26/grocery-website:latest .
           docker push shafaque26/grocery-website:latest
 
-      - name: Set up Kubernetes (Kind)
-        uses: helm/kind-action@v1.8.0
+      - name: Set up Kubernetes
+        uses: azure/setup-kubectl@v3
 
       - name: Deploy to Kubernetes
-        run: |
-          kubectl cluster-info
-          kubectl apply -f deployment.yaml
-          kubectl get pods -A
+        run: kubectl apply -f deployment.yaml
+
+      - name: Port Forward Service
+        run: kubectl port-forward svc/grocery-website-service 8080:80 &
