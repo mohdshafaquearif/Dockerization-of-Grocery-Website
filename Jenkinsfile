@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = "mohdshafaquearif/grocery-website"
+        IMAGE_NAME = "shafaque26/grocery-website"
         CONTAINER_NAME = "grocery-container"
         REPO_URL = "https://github.com/mohdshafaquearif/Dockerization-of-Grocery-Website.git"
         KUBE_DEPLOYMENT = "deployment.yaml"
