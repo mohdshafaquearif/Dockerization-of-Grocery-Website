@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grocery-website
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: grocery-website
+  template:
+    metadata:
+      labels:
+        app: grocery-website
+    spec:
+      containers:
+      - name: grocery-container
+        image: mohdshafaquearif/grocery-website:latest  # Change if needed
+        ports:
+        - containerPort: 80
+apiVersion: v1
+kind: Service
+metadata:
+  name: grocery-service
+spec:
+  selector:
+    app: grocery-website
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: NodePort
